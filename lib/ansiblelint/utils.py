@@ -538,7 +538,10 @@ def parse_yaml_linenumbers(data, filename):
             mapping = Constructor.construct_mapping(loader, node, deep=deep)
         else:
             mapping = AnsibleConstructor.construct_mapping(loader, node, deep=deep)
-        mapping[LINE_NUMBER_KEY] = node.__line__
+        if hasattr(node, '__line__'):
+            mapping[LINE_NUMBER_KEY] = node.__line__
+        else:
+            mapping[LINE_NUMBER_KEY] = mapping._line_number
         mapping[FILENAME_KEY] = filename
         return mapping
 
